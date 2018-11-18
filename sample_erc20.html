@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>KanadeCoinBasicSDK ERC20 Plugin Sample</title>
+</head>
+<body>
+    to Eth Address<br>
+    <input id="toAddr" type="text" value="0x0000000000111111111100000000001111111111"><br>
+    <br>
+    <button onclick="transferKNDC(1)">Transfer: 1 KNDC</button><br>
+    <button onclick="transferALIS(1)">Transfer: 1 ALIS</button><br>
+    <button onclick="transferNANJ(1)">Transfer: 1 NANJ</button><br>
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/KanadeCoin/basicsdk@v0.1.1/kanade.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/KanadeCoin/basicsdk-plugin-erc20@v1.0.0/kanade.erc20.min.js"></script>
+    <script>
+        function transferKNDC(amount) {
+            Kanade.plugins.erc20.setKanadeContractAddr();
+            transferToken(amount);
+        }
+
+        function transferALIS(amount) {
+            Kanade.plugins.erc20.setContractAddr('0xea610b1153477720748dc13ed378003941d84fab');
+            transferToken(amount);
+        }
+
+        function transferNANJ(amount) {
+            Kanade.plugins.erc20.setContractAddr('0xffe02ee4c69edf1b340fcad64fbd6b37a7b9e265');
+            transferToken(amount);
+        }
+
+        function transferToken(amount) {
+            toAddr = document.getElementById('toAddr').value;
+
+            Kanade.connect(null, function(resultCode) {
+                if (resultCode != Kanade.resultCode.Success) {
+                    alert('error! ... 1');
+                    return;
+                }
+
+                var decimalsAmount = amount * Math.pow(10, Kanade.decimals);
+                Kanade.transfer(toAddr, decimalsAmount, function(resultCode, txHash) {
+                    if (resultCode == Kanade.resultCode.Success) {
+                        alert("sent!!\nTX : " + txHash);
+                    } else {
+                        alert('error! ... 2');
+                    }
+                });
+            });
+        }
+    </script>
+
+</body>
+</html>
